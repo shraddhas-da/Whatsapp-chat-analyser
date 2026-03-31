@@ -6,17 +6,34 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
+import zipfile
+import io
 
 st.sidebar.title('WhatsApp Chat Analyzer')
 
 uploaded_file = st.sidebar.file_uploader('Choose a file')
+
 if uploaded_file is not None:
-    bytes_date= uploaded_file.getvalue()
-    data=bytes_date.decode('utf-8')
-    df= preprocessor.preprocess(data)
+    # Check if uploaded file is a zip
+    if uploaded_file.name.endswith(".zip"):
+        with zipfile.ZipFile(io.BytesIO(uploaded_file.getvalue()), "r") as z:
+            # WhatsApp exports usually contain one .txt file
+            txt_files = [f for f in z.namelist() if f.endswith(".txt")]
+            if txt_files:
+                data = z.read(txt_files[0]).decode("utf-8")
+            else:
+                st.error("No .txt file found inside the zip.")
+                st.stop()
+    else:
+        # Normal text file
+        data = uploaded_file.getvalue().decode("utf-8")
 
-    #st.dataframe(df)
+    # Preprocess into DataFrame
+    df = preprocessor.preprocess(data)
+    # st.success("File loaded successfully!")
+    # st.dataframe(df
 
+    
     # Fetch unique users
     user_list= df['user'].unique().tolist()
     user_list.remove('group_notification')
