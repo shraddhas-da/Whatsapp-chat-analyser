@@ -8,6 +8,7 @@ import pandas as pd
 import seaborn as sns
 import zipfile
 import io
+import matplotlib as mpl
 
 # Set page config for better layout
 st.set_page_config(layout="wide")
