@@ -149,23 +149,22 @@ if uploaded_file is not None:
             # Emoji Analysis (Fixed location and indentation)
             emoji_df = helper.emoji_helper(selected_user, df)
             st.title('Emojis Analysis')
-
-           col1, col2 = st.columns(2)
-           with col1:
-               st.dataframe(emoji_df)
-           with col2:
-               # Set emoji-compatible font
-               mpl.rcParams['font.family'] = 'Segoe UI Emoji'
+            col1, col2 = st.columns(2)
+            with col1:
+                st.dataframe(emoji_df)
+            with col2:
+                # Set emoji-compatible font
+                mpl.rcParams['font.family'] = 'Segoe UI Emoji'
                
-               fig, ax = plt.subplots()
+                fig, ax = plt.subplots()
 
-               ax.pie(
-                   emoji_df['count'],
-                   labels=emoji_df['emoji'],
-                   autopct='%1.1f%%',
-                   textprops={'fontsize': 14}
-               )
-               st.pyplot(fig)
+                ax.pie(
+                    emoji_df['count'],
+                    labels=emoji_df['emoji'],
+                    autopct='%1.1f%%',
+                    textprops={'fontsize': 14}
+                )
+                st.pyplot(fig)
 
         except ModuleNotFoundError as e:
             st.error(f"Missing Library Error: {e}. Please ensure 'urlextract' is in requirements.txt")
