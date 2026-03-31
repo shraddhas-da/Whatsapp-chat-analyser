@@ -147,25 +147,27 @@ if uploaded_file is not None:
             st.pyplot(fig)
 
             # Emoji Analysis
-            st.title('Emojis Analysis')
             emoji_df = helper.emoji_helper(selected_user, df)
-            col1, col2 = st.columns(2)
-            with col1:
-                st.dataframe(emoji_df)
-            with col2:
-                if not emoji_df.empty:
-                    import matplotlib as mpl
-                    mpl.rcParams['font.family'] = 'Segoe UI Emoji'
-                    fig, ax = plt.subplots()
-                    ax.pie(
-                        emoji_df['count'].head(10), # Top 10 for clarity
-                        labels=emoji_df['emoji'].head(10),
-                        autopct='%1.1f%%',
-                        textprops={'fontsize': 14}
-                    )
-                    st.pyplot(fig)
-                else:
-                    st.write("No emojis found.")
+        st.title('Emojis Analysis')
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.dataframe(emoji_df)
+        with col2:
+            import matplotlib.pyplot as plt
+            import matplotlib as mpl
+
+            # Set emoji-compatible font
+            mpl.rcParams['font.family'] = 'Segoe UI Emoji'
+
+            fig, ax = plt.subplots()
+
+            ax.pie(
+                emoji_df['count'],
+                labels=emoji_df['emoji'],
+                autopct='%1.1f%%',
+                textprops={'fontsize': 14}
+            )
 
         except ModuleNotFoundError as e:
             st.error(f"Missing Library Error: {e}. Please ensure 'urlextract' is in requirements.txt")
